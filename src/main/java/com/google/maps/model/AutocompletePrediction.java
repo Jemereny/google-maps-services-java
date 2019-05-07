@@ -16,6 +16,8 @@
 package com.google.maps.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Represents a single Autocomplete result returned from the Google Places API Web Service.
@@ -54,13 +56,20 @@ public class AutocompletePrediction implements Serializable {
    * Describes the location of the entered term in the prediction result text, so that the term can
    * be highlighted if desired.
    */
-  public static class MatchedSubstring {
+  public static class MatchedSubstring implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The length of the matched substring, measured in Unicode characters. */
     public int length;
 
     /** The start position of the matched substring, measured in Unicode characters. */
     public int offset;
+
+    @Override
+    public String toString() {
+      return String.format("(offset=%d, length=%d)", offset, length);
+    }
   }
 
   /**
@@ -76,12 +85,32 @@ public class AutocompletePrediction implements Serializable {
    * Identifies each section of the returned description. (A section of the description is generally
    * terminated with a comma.)
    */
-  public static class Term {
+  public static class Term implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /** The start position of this term in the description, measured in Unicode characters. */
     public int offset;
 
     /** The text of the matched term. */
     public String value;
+
+    @Override
+    public String toString() {
+      return String.format("(offset=%d, value=%s)", offset, value);
+    }
+  }
+
+  @Override
+  public String toString() {
+    return String.format(
+        "[AutocompletePrediction: \"%s\", placeId=%s, types=%s, terms=%s, "
+            + "matchedSubstrings=%s, structuredFormatting=%s]",
+        description,
+        placeId,
+        Arrays.toString(types),
+        Arrays.toString(terms),
+        Arrays.toString(matchedSubstrings),
+        Objects.toString(structuredFormatting));
   }
 }

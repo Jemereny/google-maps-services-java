@@ -35,6 +35,9 @@ import com.google.maps.model.PlaceDetails.Review.AspectRating.RatingType;
 import com.google.maps.model.PriceLevel;
 import com.google.maps.model.TravelMode;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -45,9 +48,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.joda.time.DateTime;
-import org.joda.time.Instant;
-import org.joda.time.LocalTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -153,7 +153,7 @@ public class OkHttpPendingResult<T, R extends ApiResponse<T>>
       }
     }
 
-    final BlockingQueue<QueuedResponse> waiter = new ArrayBlockingQueue<QueuedResponse>(1);
+    final BlockingQueue<QueuedResponse> waiter = new ArrayBlockingQueue<>(1);
     final OkHttpPendingResult<T, R> parent = this;
 
     // This callback will be called on another thread, handled by the RateLimitExecutorService.
@@ -240,7 +240,7 @@ public class OkHttpPendingResult<T, R extends ApiResponse<T>>
 
     Gson gson =
         new GsonBuilder()
-            .registerTypeAdapter(DateTime.class, new DateTimeAdapter())
+            .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeAdapter())
             .registerTypeAdapter(Distance.class, new DistanceAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
             .registerTypeAdapter(Fare.class, new FareAdapter())

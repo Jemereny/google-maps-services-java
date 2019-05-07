@@ -54,7 +54,7 @@ public class LocalTestServerContext implements AutoCloseable {
     this.context =
         new GeoApiContext.Builder()
             .apiKey("AIzaFakeKey")
-            .baseUrlForTesting("http://127.0.0.1:" + server.getPort())
+            .baseUrlOverride("http://127.0.0.1:" + server.getPort())
             .build();
   }
 
@@ -69,14 +69,14 @@ public class LocalTestServerContext implements AutoCloseable {
     this.context =
         new GeoApiContext.Builder()
             .apiKey("AIzaFakeKey")
-            .baseUrlForTesting("http://127.0.0.1:" + server.getPort())
+            .baseUrlOverride("http://127.0.0.1:" + server.getPort())
             .build();
   }
 
   private List<NameValuePair> parseQueryParamsFromRequestLine(String requestLine)
       throws URISyntaxException {
     // Extract the URL part from the HTTP request line
-    String[] chunks = requestLine.split("\\s");
+    String[] chunks = requestLine.split("\\s", -1);
     String url = chunks[1];
 
     return URLEncodedUtils.parse(new URI(url), Charset.forName("UTF-8"));
@@ -99,10 +99,10 @@ public class LocalTestServerContext implements AutoCloseable {
 
   public String path() throws InterruptedException {
     this.takeRequest();
-    return request.getPath().split("\\?")[0];
+    return request.getPath().split("\\?", -1)[0];
   }
 
-  void assertParamValue(String expectedValue, String paramName)
+  void assertParamValue(String expected, String paramName)
       throws URISyntaxException, InterruptedException {
     if (this.params == null) {
       this.params = this.actualParams();
@@ -111,13 +111,13 @@ public class LocalTestServerContext implements AutoCloseable {
     for (NameValuePair pair : params) {
       if (pair.getName().equals(paramName)) {
         paramFound = true;
-        assertEquals(expectedValue, pair.getValue());
+        assertEquals(expected, pair.getValue());
       }
     }
     assertTrue(paramFound);
   }
 
-  void assertParamValues(List<String> expectedValues, String paramName)
+  void assertParamValues(List<String> expecteds, String paramName)
       throws URISyntaxException, InterruptedException {
     if (this.params == null) {
       this.params = this.actualParams();
@@ -125,11 +125,11 @@ public class LocalTestServerContext implements AutoCloseable {
     int paramsFound = 0;
     for (NameValuePair pair : params) {
       if (pair.getName().equals(paramName)) {
-        assertEquals(expectedValues.get(paramsFound), pair.getValue());
+        assertEquals(expecteds.get(paramsFound), pair.getValue());
         paramsFound++;
       }
     }
-    assertEquals(paramsFound, expectedValues.size());
+    assertEquals(paramsFound, expecteds.size());
   }
 
   @Override

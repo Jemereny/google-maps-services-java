@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Google Inc. All rights reserved.
+ * Copyright 2018 Google Inc. All rights reserved.
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -17,30 +17,14 @@ package com.google.maps.model;
 
 import java.io.Serializable;
 
-/** A speed limit result from the Roads API. */
-public class SpeedLimit implements Serializable {
+public class FindPlaceFromText implements Serializable {
 
   private static final long serialVersionUID = 1L;
-  /**
-   * A unique identifier for a place. All placeIds returned by the Roads API will correspond to road
-   * segments.
-   */
-  public String placeId;
 
-  /**
-   * The speed limit for that road segment, specified in kilometers per hour.
-   *
-   * <p>To obtain the speed in miles per hour, use {@link #speedLimitMph()}.
-   */
-  public double speedLimit;
-
-  /** @return Returns the speed limit in miles per hour (MPH). */
-  public long speedLimitMph() {
-    return Math.round(speedLimit * 0.621371);
-  }
+  public PlacesSearchResult candidates[];
 
   @Override
   public String toString() {
-    return String.format("[%.0f km/h, placeId=%s]", speedLimit, placeId);
+    return String.format("[FindPlaceFromText %d candidates]", candidates.length);
   }
 }

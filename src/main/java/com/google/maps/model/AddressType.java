@@ -47,6 +47,9 @@ public enum AddressType implements UrlValue {
   /** A major intersection, usually of two major roads. */
   INTERSECTION("intersection"),
 
+  /** A continent. */
+  CONTINENT("continent"),
+
   /** A political entity. Usually, this type indicates a polygon of some civil administration. */
   POLITICAL("political"),
 
@@ -381,6 +384,9 @@ public enum AddressType implements UrlValue {
   FUNERAL_HOME("funeral_home"),
 
   /** Currently not a documented return type. */
+  GENERAL_CONTRACTOR("general_contractor"),
+
+  /** Currently not a documented return type. */
   HINDU_TEMPLE("hindu_temple"),
 
   /** Currently not a documented return type. */
@@ -436,6 +442,10 @@ public enum AddressType implements UrlValue {
 
   /** Currently not a documented return type. */
   ZOO("zoo"),
+
+  /** An archipelago. */
+  ARCHIPELAGO("archipelago"),
+
   /**
    * Indicates an unknown address type returned by the server. The Java Client for Google Maps
    * Services should be updated to support the new value.

@@ -18,6 +18,7 @@ package com.google.maps;
 import com.google.maps.internal.ApiConfig;
 import com.google.maps.internal.StringJoin;
 import com.google.maps.internal.StringJoin.UrlValue;
+import com.google.maps.model.EncodedPolyline;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.Size;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class StaticMapsRequest
 
   @Override
   protected void validateRequest() {
-    if (!(params().containsKey("center") && params().containsKey("zoom")
+    if (!((params().containsKey("center") && params().containsKey("zoom"))
         || params().containsKey("markers"))) {
       throw new IllegalArgumentException(
           "Request must contain 'center' and 'zoom' if 'markers' isn't present.");
@@ -138,6 +139,7 @@ public class StaticMapsRequest
     terrain,
     hybrid;
 
+    @Override
     public String toUrlValue() {
       return this.name();
     }
@@ -167,7 +169,7 @@ public class StaticMapsRequest
 
   public static class Markers implements UrlValue {
 
-    public static enum MarkersSize implements UrlValue {
+    public enum MarkersSize implements UrlValue {
       tiny,
       mid,
       small,
@@ -179,7 +181,7 @@ public class StaticMapsRequest
       }
     }
 
-    public static enum CustomIconAnchor implements UrlValue {
+    public enum CustomIconAnchor implements UrlValue {
       top,
       bottom,
       left,
@@ -430,6 +432,17 @@ public class StaticMapsRequest
    */
   public StaticMapsRequest path(Path path) {
     return paramAddToList("path", path);
+  }
+
+  /**
+   * The <code>path</code> parameter defines a set of one or more locations connected by a path to
+   * overlay on the map image. This variant of the method accepts the path as an EncodedPolyline.
+   *
+   * @param path A path to render atop the map, as an EncodedPolyline.
+   * @return Returns this {@code StaticMapsRequest} for call chaining.
+   */
+  public StaticMapsRequest path(EncodedPolyline path) {
+    return paramAddToList("path", "enc:" + path.getEncodedPath());
   }
 
   /**
